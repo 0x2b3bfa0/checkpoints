@@ -1,0 +1,24 @@
+on: push
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: iterative/setup-dvc@v1
+      - run: |
+          export DVC_ROOT="$(realpath "$(dirname "$0")")"
+          source patches/authentication.sh
+          source patches/checkpointing.sh
+
+          dvc exp pull origin "cml-${GITHUB_REF##*/}-${GITHUB_SHA}" &&
+          dvc exp apply "$_"
+          dvc exp run --name "$_"
+
+      # - uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     limit-access-to-actor: true
