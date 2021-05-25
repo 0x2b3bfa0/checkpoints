@@ -3,5 +3,6 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - uses: iterative/setup-dvc@v1
       - run: dvc exp run
