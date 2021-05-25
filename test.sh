@@ -14,10 +14,11 @@ function push() {
 }
 
 function monitor() {
-  fswatch --event Removed "$FLAG" | while read event; do push; done
+  fswatch --event Removed "$(realpath "$FLAG")" | while read event; do push; done
 }
 
 monitor &
+while :; do push || true; sleep 10; done &
 
 test -f test.data || echo 0 > test.data
 echo "Initial state $(cat test.data)"
