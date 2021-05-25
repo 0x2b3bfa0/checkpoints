@@ -17,10 +17,12 @@ function monitor() {
   fswatch --event Removed "$FLAG" | while read event; do push; done
 }
 
+monitor &
+
 test -f test.data || echo 0 > test.data
 echo "Initial state $(cat test.data)"
 
-for iteration in {1..10}; do
+for iteration in {1..60}; do
     echo $(($(cat test.data)+1)) > test.data
     echo "New state $(cat test.data)"
     checkpoint
