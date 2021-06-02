@@ -10,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: iterative/setup-dvc@v1
+      - uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
       - run: |
           export DVC_ROOT="$(realpath "$(dirname "$0")")"
           source patches/authentication.sh
@@ -19,6 +22,3 @@ jobs:
           dvc exp apply "$_"
           dvc exp run --name "$_"
 
-      # - uses: mxschmitt/action-tmate@v3
-      #   with:
-      #     limit-access-to-actor: true

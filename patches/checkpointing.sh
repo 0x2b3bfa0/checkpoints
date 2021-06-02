@@ -3,8 +3,7 @@
 
 FLAG="$DVC_ROOT/.dvc/tmp/DVC_CHECKPOINT"
 
-sudo apt install --yes fswatch
-fswatch --event Removed "$FLAG" | while read event; do
+while true; do sleep 10
   dvc exp list --names-only | while read experiment; do
     dvc exp push origin "$experiment"
   done
