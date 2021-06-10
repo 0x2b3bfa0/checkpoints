@@ -1,10 +1,16 @@
 # Automatic checkpoint pushing mechanism for DVC
 # See https://github.com/iterative/cml/issues/560#issuecomment-852250748
 
-FLAG="$DVC_ROOT/.dvc/tmp/DVC_CHECKPOINT"
+sudo apt install --yes inotify-tools
 
-while true; do sleep 10
-  dvc exp list --names-only | while read experiment; do
-    dvc exp push origin "$experiment"
-  done
+mkdir --parents "$DVC_ROOT/.dvc/tmp"
+
+inotifywait --monitor --event=delete "$_" |
+grep --line-buffered DVC_CHECKPOINT |
+while read event; do
+  dvc exp push --verbose origin "$EXPERIMENT"
 done &
+
+dvc exp pull origin "$EXPERIMENT"
+dvc exp apply "$EXPERIMENT"
+dvc exp run --name "$EXPERIMENT"

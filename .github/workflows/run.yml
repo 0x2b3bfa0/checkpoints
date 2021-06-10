@@ -15,10 +15,7 @@ jobs:
           limit-access-to-actor: true
       - run: |
           export DVC_ROOT="$(realpath "$(dirname "$0")")"
+          export EXPERIMENT="cml-${GITHUB_REF##*/}-${GITHUB_SHA}"
+
           source patches/authentication.sh
           source patches/checkpointing.sh
-
-          dvc exp pull origin "cml-${GITHUB_REF##*/}-${GITHUB_SHA}" &&
-          dvc exp apply "$_"
-          dvc exp run --name "$_"
-

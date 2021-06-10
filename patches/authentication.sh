@@ -13,3 +13,5 @@ address="$(
 )"
 
 git config --local remote.origin.url "https://$credentials@$address"
+git config --local user.email "action@github.com"
+git config --local user.name "GitHub Action"
